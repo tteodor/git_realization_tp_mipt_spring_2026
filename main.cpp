@@ -13,6 +13,7 @@
 int command_init(int args, char** argv);
 int command_add(int args, char** argv);
 int command_commit(int args, char** argv);
+int command_status(int args, char** argv);
 
 int main(int argc, char* argv[]) {
     std::vector<std::string> args(argv, argv + argc);
@@ -31,10 +32,10 @@ int main(int argc, char* argv[]) {
         command_add(argc, argv);
     } else if (command == "commit") {
         command_commit(argc, argv);
+    } else if (command == "status") {
+        command_status(argc, argv);
     // } else if (command == "log") {
     //     command_log(command_args);
-    // } else if (command == "status") {
-    //     command_status(command_args);
     // } else if (command == "show") {
     //     command_show(command_args);
     // } else if (command == "pure_merge") {
