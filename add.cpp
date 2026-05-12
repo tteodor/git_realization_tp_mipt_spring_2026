@@ -1,4 +1,5 @@
 #include "add.hh"
+#include "ignore.hh"
 #include <iostream>
 #include <filesystem>
 
@@ -24,11 +25,29 @@ int command_add(int argc, char** argv) {
         return 3;
     }
     try {
-        fs::path destination = stage_dir / source.filename();
-        fs::copy(source, destination, fs::copy_options::overwrite_existing);
-        std::cout << "added " << argv[2] << " to staging area\n";
+        if (fs::is_directory(source)) {
+            for (auto& entry : fs::recursive_directory_iterator(source)) {
+                if (entry.is_regular_file() && !is_ignored(entry.path())) {
+                    if (entry.path().string().find(".gitpta") != std::string::npos) {
+                        continue;
+                    }
+
+                    fs::path dest_dir = stage_dir / fs::relative(entry.path(), fs::current_path());
+                    fs::create_directories(dest_dir.parent_path());
+                    fs::copy(entry.path(), dest_dir, fs::copy_options::overwrite_existing);
+                    std::cout << "add " << fs::relative(entry.path(), fs::current_path()).string() << " to staging area\n";
+                }
+            }
+        } else {
+            if (!is_ignored(source)) {
+                fs::path dest_dir = stage_dir / source;
+                fs::create_directories(dest_dir.parent_path());
+                fs::copy(source, dest_dir, fs::copy_options::overwrite_existing);
+                std::cout << "add " << argv[2] << " to staging area\n";
+            }
+        }
     } catch (...) {
-        std::cerr << "error during copying file " << argv[2];
+        std::cerr << "error during copying file " << argv[2] << "\n";
         return 4;
     }
     return 0;

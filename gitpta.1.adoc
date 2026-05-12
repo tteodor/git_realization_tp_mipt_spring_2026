@@ -1,0 +1,41 @@
+= gitpta(1)
+:doctype: manpage
+
+== NAME
+gitpta - custom git project
+
+== SYNOPSIS
+*gitpta* <command> [<args>]
+
+== DESCRIPTION
+gitpta is a custom git realisation
+
+== COMMANDS
+*init*::
+    Initialize new empty repo in ".gitpta"
+
+*add* <file/dir>::
+    Add file contents to staging area. Supports directories and ".gitpta_ignore"
+
+*commit* -m "<message>"::
+    Create new commit with message
+
+*switch* [-c] <branch_name>::
+    Switch branches. Use -c to create a new branch
+
+*status*::
+    Show working tree status
+
+*show* [--format=...] [<commit>]::
+    Show files in commit
+
+*pure_merge* <commit_id>::
+    Join two development histories together using a pure merge strategy
+
+== FILES
+".gitpta/"::
+    Directory containing the repository data
+
+".gitpta_ignore/"::
+    Specifies untracked files to ignore
+

@@ -18,6 +18,7 @@ int command_status(int args, char** argv);
 int command_log(int args, char** argv);
 int command_show(int args, char** argv);
 int command_pure_merge(int args, char** argv);
+int command_switch(int argc, char** argv);
 
 int main(int argc, char* argv[]) {
     std::vector<std::string> args(argv, argv + argc);
@@ -40,6 +41,8 @@ int main(int argc, char* argv[]) {
         command_show(argc, argv);
     } else if (command == "pure_merge") {
         command_pure_merge(argc, argv);
+    }else if (command == "switch") {
+        command_switch(argc, argv);
     } else {
         std::cerr << "Unknown command: " << command << "\n";
         return 1;

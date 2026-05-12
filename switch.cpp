@@ -19,14 +19,40 @@ std::string get_commit_id(const std::string& target) {
 
 int command_switch(int argc, char** argv) {
     if (argc < 3) {
-        std::cerr << "usage: gitpta switch branch/commit_id\n";
+        std::cerr << "usage: gitpta switch [-c] branch/commit_id\n";
         return 8;
     }
     std::string target = argv[2];
+    bool create_branch = false;
+    if (std::string(argv[2]) == "-c") {
+        if (argc < 4) {
+            std::cerr << "usage: gitpta switch -c branch_name\n";
+            return 8;
+        }
+        create_branch = true;
+        target = argv[3];
+    }
     fs::path gitpta_dir = ".gitpta";
     if (!fs::exists(gitpta_dir)) {
         std::cerr << "error: not a gitpta repository\n";
         return 9;
+    }
+    std::string curr_head = "root";
+    fs::path head_file = gitpta_dir / "head";
+    if (fs::exists(head_file)) {
+        std::ifstream in(head_file);
+        in >> curr_head;
+    }
+
+    if (create_branch) {
+        fs::path branch_file = gitpta_dir / "branches" / target;
+        std::string current_commit_id = get_commit_id(curr_head);
+        std::ofstream out(branch_file);
+        out << current_commit_id << "\n";
+        std::ofstream head_out(head_file);
+        head_out << target << "\n";
+        std::cout << "switch to a new branch " << target << "\n";
+        return 0;
     }
 
     std::string target_commit_id = get_commit_id(target);
@@ -36,12 +62,6 @@ int command_switch(int argc, char** argv) {
         return 10;
     }
 
-    std::string curr_head = "root";
-    fs::path head_file = gitpta_dir / "head";
-    if (fs::exists(head_file)) {
-        std::ifstream in(head_file);
-        in >> curr_head;
-    }
     std::string curr_commit_id = get_commit_id(curr_head);
     if (curr_commit_id != "root") {
         fs::path curr_commit_dir = gitpta_dir / "commits" / curr_commit_id;
