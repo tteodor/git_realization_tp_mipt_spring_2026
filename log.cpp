@@ -4,6 +4,6 @@
 #include <fstream>
 
 
-void command_log(const std::vector<std::string>& args) {
-    // realization
+int command_log(int argc, char** argv) {
+    return 179;
 }

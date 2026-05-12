@@ -1,7 +1,6 @@
 #pragma once
-
-#include <vector>
 #include <string>
 
-void command_commit(const std::vector<std::string>& args);
+std::string get_commit_id();
+int command_commit(int argc, char** argv);
 

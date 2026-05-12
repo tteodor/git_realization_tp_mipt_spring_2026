@@ -1,6 +1,4 @@
 #pragma once
 
-#include <vector>
-#include <string>
+int command_status(int argc, char** argv);
 
-void command_status(const std::vector<std::string>& args);

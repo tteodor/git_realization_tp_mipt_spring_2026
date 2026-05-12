@@ -1,3 +1,4 @@
+#include "commit.hh"
 #include <iostream>
 #include <string>
 #include <filesystem>
