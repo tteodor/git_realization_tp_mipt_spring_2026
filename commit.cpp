@@ -70,4 +70,3 @@ int command_commit(int argc, char** argv) {
     }
     return 0;
 }
-
